@@ -38,6 +38,26 @@ function exportXlsx (data) {
         [4, "Activity Name 4", "Sector", "Sub-Sector", "Scheme Short Name", "Department", "Total Activity Budget", "Completion Time", "High, Med, Low"]
     ];
 
+    // let headRowArray = [
+    //     ["Village Development Plan - Statement 2"],
+    //     ["Village: Bhaisbor", null, null, "Gram Panchayat: Bhaisbor GP"],
+    //     ["Statement 2: Details of each Area of Work"],
+    //     [1, 2, 3, 4, 5, 6],
+    //     ["AOW ID", "Area Of Work (AOW)", "Milestones", "Milesstone Timeline", "Responsibility", "Outcome"],
+    //     ["Group Name 1"],
+    //     [1, "Activity Name 1", "Milestone Name1", "End Date", "Responsibility", "Outcome"],
+    //     [1, "Activity Name 1", "Milestone Name 2", "End Date", "Responsibility", "Outcome"],
+    //     [2, "Activity Name 2", "Milestone Name 3", "End Date", "Responsibility", "Outcome"],
+    //     [2, "Activity Name 2", "Milestone Name 4", "End Date", "Responsibility", "Outcome"],
+    //     [2, "Activity Name 2", "Milestone Name 5", "End Date", "Responsibility", "Outcome"],
+    //     ["Group Name 2"],
+    //     [3, "Activity Name 3", "Milestone Name 6", "End Date", "Responsibility", "Outcome"],
+    //     [3, "Activity Name 3", "Milestone Name 7", "End Date", "Responsibility", "Outcome"],
+    //     [3, "Activity Name 3", "Milestone Name8", "End Date", "Responsibility", "Outcome"],
+    //     [4, "Activity Name 4", "Milestone Name 9", "End Date", "Responsibility", "Outcome"],
+    //     [4, "Activity Name 4", "Milestone Name 10", "End Date", "Responsibility", "Outcome"]
+    // ];
+
     let rowsLength = headRowArray.length;
     let maxRowLength = 0;
     for (let i = 0; i < rowsLength; i++) {
