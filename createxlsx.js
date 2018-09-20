@@ -2,7 +2,6 @@ const Excel = require('exceljs');
 
 function exportXlsx (data) {
     let sheetName = data.sheetName || 'statement1';
-
     var workbook = new Excel.Workbook();
     workbook.creator = 'Sankalp';
     workbook.created = new Date();
@@ -25,45 +24,65 @@ function exportXlsx (data) {
     worksheet.pageSetup.printArea = 'A1:G20';
     worksheet.pageSetup.printTitlesRow = '1:3';
 
-    let headRowArray = [[null, "Village Development Plan - Statement 1"], [null, "Village: Bhaisbor", null, null, null, null, "Gram Panchayat: Bhaisbor GP"], [null, "Statement 1: Summary of all Areas of Work"], [null, 1, 2, 3, 4, 5, 6, 7, 8, 9], [null, "AOW ID", "Area Of Work (AOW)", "Sector", "Sub-Sector", "Funding\n(Scheme / Strategy)", "Line Department / Agency", "Budget\n(INR)", "Completion Time\n(In Months)", "Priority"], [null, "Group Name 1"], [null, 1, "Activity Name 1", "Sector", "Sub-Sector", "Scheme Short Name", "Department", "Total Activity Budget", "Completion Time", "High, Med, Low"], [null, 2, "Activity Name 2", "Sector", "Sub-Sector", "Scheme Short Name", "Department", "Total Activity Budget", "Completion Time", "High, Med, Low"], [null, "Group Name 2"], [null, 3, "Activity Name 3", "Sector", "Sub-Sector", "Scheme Short Name", "Department", "Total Activity Budget", "Completion Time", "High, Med, Low"], [null, 4, "Activity Name 4", "Sector", "Sub-Sector", "Scheme Short Name", "Department", "Total Activity Budget", "Completion Time", "High, Med, Low"]];
-    // let headRowArray = [{value: 'Village Development Plan - Statement 1'},
-    // {villageName: 'Bhaisbor', gramPanchayatName: 'Gram Panchayat: Bhaisbor GP'},
-    // {summary: 'Statement 1: Summary of all Area of Work'}];
+    let headRowArray = [
+        ["Village Development Plan - Statement 1"],
+        ["Village: Bhaisbor", null, null, null, null, "Gram Panchayat: Bhaisbor GP"],
+        ["Statement 1: Summary of all Areas of Work"],
+        [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        ["AOW ID", "Area Of Work (AOW)", "Sector", "Sub-Sector", "Funding\n(Scheme / Strategy)", "Line Department / Agency", "Budget\n(INR)", "Completion Time\n(In Months)", "Priority"],
+        ["Group Name 1"],
+        [1, "Activity Name 1", "Sector", "Sub-Sector", "Scheme Short Name", "Department", "Total Activity Budget", "Completion Time", "High, Med, Low"],
+        [2, "Activity Name 2", "Sector", "Sub-Sector", "Scheme Short Name", "Department", "Total Activity Budget", "Completion Time", "High, Med, Low"],
+        ["Group Name 2"],
+        [3, "Activity Name 3", "Sector", "Sub-Sector", "Scheme Short Name", "Department", "Total Activity Budget", "Completion Time", "High, Med, Low"],
+        [4, "Activity Name 4", "Sector", "Sub-Sector", "Scheme Short Name", "Department", "Total Activity Budget", "Completion Time", "High, Med, Low"]
+    ];
 
-    for (let i = 0; i < headRowArray.length; i++) {
-        // let rowValues = [];
-        // if (i === 0) {
-        //     rowValues[0] = headRowArray[0].value;
-        //     console.log(rowValues);
+    let rowsLength = headRowArray.length;
+    let maxRowLength = 0;
+    for (let i = 0; i < rowsLength; i++) {
+        newLength = headRowArray[i].length;
+        if (maxRowLength < newLength) {
+            maxRowLength = newLength;
+        }
         worksheet.addRow(headRowArray[i]);
-        // } else if (i === 1) {
-        //     rowValues[0] = headRowArray[1].villageName;
-        //     rowValues[5] = headRowArray[1].gramPanchayatName;
-        //     console.log(rowValues);
-        //     worksheet.addRow(rowValues);
-        // } else if (i === 2) {
-        //     rowValues[0] = headRowArray[2].summary;
-        //     console.log(rowValues);
-        //     worksheet.addRow(rowValues);
-        // }
     }
 
-    // worksheet.columns = [
-    //     {header: 'AOW ID', key: 'aow_id', width: 15},
-    //     {header: 'Area of Work (AOW)', key: 'work_id', width: 15},
-    //     {header: 'Sector', key: 'sector_id', width: 15},
-    //     {header: 'Sub-Sector', key: 'sub_sector_id', width: 15},
-    //     {header: 'Funding (Scheme / Strategy)', key: 'funding_id', width: 15},
-    //     {header: 'Line Department / Agency', key: 'department_id', width: 15},
-    //     {header: 'Budget (INR)', key: 'budget_id', width: 15},
-    //     {header: 'Completion Time (in Months)', key: 'completion_id', width: 15},
-    //     {header: 'Prority', key: 'priority_id', width: 15},
-    // ];
+    if (maxRowLength === 9) {
+        worksheet.mergeCells('A1', 'I1');
+        worksheet.mergeCells('A2', 'E2');
+        worksheet.mergeCells('F2', 'I2');
+        worksheet.mergeCells('A3', 'I3');
+    } else if (maxRowLength === 6) {
+        worksheet.mergeCells('A1', 'F1');
+        worksheet.mergeCells('A2', 'C2');
+        worksheet.mergeCells('D2', 'F2');
+        worksheet.mergeCells('A3', 'F3');
+    }
 
+    worksheet.getRow(1).font = {name: 'sans-serif', bold: true};
+    worksheet.getRow(2).font = {name: 'sans-serif', bold: true};
+    worksheet.getRow(3).font = {name: 'sans-serif', bold: true};
+
+    let ArrayOfColumns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+    ArrayOfColumns.length = maxRowLength;
+    headRowArray.push([]);
+
+    headRowArray.forEach((row, index) => {
+        ArrayOfColumns.forEach(element => {
+            let cellName = element.toString() + index.toString();
+            worksheet.getCell(cellName).alignment = {horizontal: 'center', wrapText: true, indent: 1, readingOrder: 'ltr'};
+            worksheet.getCell(cellName).border = {
+                top: {style: "medium"},
+                left: {style: "medium"},
+                bottom: {style: "medium"},
+                right: {style: "medium"}
+            };
+        });
+    });
     workbook.xlsx.writeFile('./sp.xlsx', 'utf-8').then((result) => {
         console.log('Result :-', result);
     });
-
 }
 let data = {};
 exportXlsx(data);
