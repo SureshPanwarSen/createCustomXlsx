@@ -1,233 +1,154 @@
-const Excel = require('exceljs');
+const path = require('path');
+const XLSX = require('xlsx');
 
-let objectB = {
-    "statementType": "2",
-    "data": {
-        "_id": "5ba48ac656aed728332f2914",
-        "__v": 0,
-        "name": "Plan",
-        "year": "1",
-        "status": "2",
-        "vision": {
-            "_id": "5ba35aa28e1d663240d21e91",
-            "name": "Vision ",
-            "color": "#3B9C9C",
-            "description": "Desc",
-            "totalGoalWeightage": 20,
-            "deleted": false,
-            "goals": [
-                "5ba35ab38e1d663240d21e93",
-                "5ba48adc56aed728332f2916"
-            ],
-            "objectives": ""
-        },
-        "country": "India",
-        "state": "ANDHRA PRADESH",
-        "district": "CHITTOOR",
-        "tehsil": "Bangarupalem",
-        "village": "Bodabafdla",
-        "owner": "owner",
-        "description": "desc",
-        "nextActivityId": 1,
-        "groups": [
-            {
-                "group": "group",
-                "_id": "5ba48b0b56aed728332f2917",
-                "activities": [
-                    {
-                        "_id": "5ba48b0b56aed728332f2918",
-                        "plan": "5ba48ac656aed728332f2914",
-                        "name": "act",
-                        "group": "5ba48b0b56aed728332f2917",
-                        "__v": 0,
-                        "priority": "2",
-                        "department": "1",
-                        "subSector": "1",
-                        "sector": "1",
-                        "completionTime": "10 Months 3 Days",
-                        "notes": "<p>notes act</p>",
-                        "scheme": {
-                            "_id": "5b1a0c58513f32224e49a242",
-                            "schemeName": "Scheme"
-                        },
-                        "sequenceId": 1,
-                        "totalBudget": 100,
-                        "kpis": [
-                            "5b9f58742cabc519984380c3"
-                        ],
-                        "milestones": [
-                            {
-                                "_id": "5ba48b7d56aed728332f2919",
-                                "__v": 0,
-                                "activity": "5ba48b0b56aed728332f2918",
-                                "name": "Milestone",
-                                "responsibility": "resp",
-                                "startDate": "2018-09-16T18:30:00.000Z",
-                                "outcome": "outcome",
-                                "duration": 10,
-                                "endDate": "2019-07-16T18:30:00.000Z",
-                                "durationType": "Months",
-                                "deleted": false,
-                                "budget": 100
-                            },
-                            {
-                                "_id": "5ba48b7d56aed728332f2919",
-                                "__v": 0,
-                                "activity": "5ba48b0b56aed728332f2918",
-                                "name": "Milestone",
-                                "responsibility": "resp",
-                                "startDate": "2018-09-16T18:30:00.000Z",
-                                "outcome": "outcome",
-                                "duration": 10,
-                                "endDate": "2019-07-16T18:30:00.000Z",
-                                "durationType": "Months",
-                                "deleted": false,
-                                "budget": 100
-                            }
-                        ],
-                        "goals": [],
-                        "tags": [],
-                        "endDateActivity": "2019-07-16T18:30:00.000Z",
-                        "startDateActivity": "2018-09-16T18:30:00.000Z"
-                    }
-                ]
-            }
-        ],
-        "deleted": false
-    },
-    "status": 1
+const subsectors = [{
+    value: '0',
+    viewValue: 'Afforestation'
+},
+{
+    value: '1',
+    viewValue: 'Communication'
+},
+{
+    value: '3',
+    viewValue: 'Horticulture'
+},
+{
+    value: '4',
+    viewValue: 'Public Transport'
+},
+{
+    value: '5',
+    viewValue: 'Village Institution'
+},
+{
+    value: '6',
+    viewValue: 'Water Security'
+},
+{
+    value: '7',
+    viewValue: 'Land Development'
+},
+{
+    value: '8',
+    viewValue: 'Rural Sanitation'
+},
+{
+    value: '9',
+    viewValue: 'Strengthening Democracy'
+},
+{
+    value: '10',
+    viewValue: 'Health'
+},
+{
+    value: '11',
+    viewValue: 'E-governance'
+},
+{
+    value: '12',
+    viewValue: 'Education'
+},
+{
+    value: '13',
+    viewValue: 'Vulnerable Section'
+},
+{
+    value: '14',
+    viewValue: 'Food Security'
+},
+{
+    value: '15',
+    viewValue: 'Well Being'
 }
+];
 
-let objectA = {
-    "statementType": "1",
-    "data": {
-        "_id": "5b6bc146b3c1ef11b6457be5",
-        "name": "devplannnnn",
-        "status": "2",
-        "year": "1",
-        "projectName": "2",
-        "country": "India",
-        "state": "ANDAMAN AND NICOBAR ISLANDS",
-        "district": "NORTH AND MIDDLE ANDAMAN",
-        "tehsil": "Mayabunder",
-        "village": "Asha Nagar (EFA)",
-        "nextActivityId": 15,
-        "groups": [
-            {
-                "group": "Group",
-                "_id": "5b6bc175b3c1ef11b6457be6",
-                "activities": [
-                    {
-                        "_id": "5b9b64b2ed13452dd1ecf8e3",
-                        "plan": "5b6bc146b3c1ef11b6457be5",
-                        "name": "Act for delete",
-                        "group": "5b6bc175b3c1ef11b6457be6",
-                        "__v": 0,
-                        "sequenceId": 12,
-                        "totalBudget": 0,
-                        "kpis": [],
-                        "scheme": {
-                            "_id": '',
-                            "schemeName": "Scheme 1"
-                        },
-                        "milestones": [],
-                        "goals": [],
-                        "tags": [],
-                        "endDateActivity": "1969-12-31T18:30:00.000Z",
-                        "startDateActivity": "2099-12-31T18:30:00.000Z"
-                    },
-                    {
-                        "_id": "5b9b75d37082d7409cfce216",
-                        "plan": "5b6bc146b3c1ef11b6457be5",
-                        "name": "Act for delete 2",
-                        "group": "5b6bc175b3c1ef11b6457be6",
-                        "__v": 0,
-                        "sequenceId": 13,
-                        "totalBudget": 0,
-                        "kpis": [],
-                        "milestones": [],
-                        "goals": [], "scheme": {
-                            "_id": '',
-                            "schemeName": "Scheme 1"
-                        },
-                        "tags": [],
-                        "endDateActivity": "1969-12-31T18:30:00.000Z",
-                        "startDateActivity": "2099-12-31T18:30:00.000Z"
-                    },
-                    {
-                        "_id": "5b9f57fd2cabc519984380c1",
-                        "plan": "5b6bc146b3c1ef11b6457be5",
-                        "name": "act statement",
-                        "group": "5b6bc175b3c1ef11b6457be6",
-                        "__v": 0,
-                        "sequenceId": 14,
-                        "totalBudget": 0,
-                        "kpis": [],
-                        "milestones": [],
-                        "goals": [],
-                        "tags": [],
-                        "scheme": {
-                            "_id": '',
-                            "schemeName": "Scheme 1"
-                        },
-                        "endDateActivity": "1969-12-31T18:30:00.000Z",
-                        "startDateActivity": "2099-12-31T18:30:00.000Z"
-                    },
-                    {
-                        "_id": "5b9f587f2cabc519984380c4",
-                        "plan": "5b6bc146b3c1ef11b6457be5",
-                        "name": "act statement",
-                        "group": "5b6bc175b3c1ef11b6457be6",
-                        "__v": 0,
-                        "sequenceId": 15,
-                        "totalBudget": 0,
-                        "kpis": [
-                            "5b9f58742cabc519984380c3"
-                        ],
-                        "milestones": [],
-                        "scheme": {
-                            "_id": '',
-                            "schemeName": "Scheme 1"
-                        },
-                        "goals": [],
-                        "tags": [],
-                        "endDateActivity": "1969-12-31T18:30:00.000Z",
-                        "startDateActivity": "2099-12-31T18:30:00.000Z"
-                    }
-                ]
-            }
-        ],
-        "deleted": false
-    },
-    "status": 1
-};
+const priorities = [{
+    value: '0',
+    viewValue: 'Low'
+},
+{
+    value: '1',
+    viewValue: 'Medium'
+},
+{
+    value: '2',
+    viewValue: 'High'
+}
+];
 
-function exportXlsx (inputObject) {
-    // inputObject = JSON.parse(inputObject);
-    // let sheetName = data.sheetName || 'statement';
-    var workbook = new Excel.Workbook();
-    workbook.creator = 'Sankalp';
-    workbook.created = new Date();
-    workbook.modified = new Date();
-    workbook.views = [
-        {
-            x: 0, y: 0, width: 10000, height: 20000,
-            firstSheet: 0, activeTab: 1, visibility: 'visible'
-        }
-    ];
+const sectors = [{
+    value: '0',
+    viewValue: 'Ecology & Environment Development'
+},
+{
+    value: '1',
+    viewValue: 'Basic Amenities'
+},
+{
+    value: '3',
+    viewValue: 'Economic Development'
+},
+{
+    value: '4',
+    viewValue: 'Infrastructure'
+},
+{
+    value: '5',
+    viewValue: 'Social Development'
+},
+{
+    value: '6',
+    viewValue: 'Governance'
+},
+{
+    value: '7',
+    viewValue: 'Human Development'
+}
+];
 
-    var worksheet = workbook.addWorksheet('statement', {
-        pageSetup: {paperSize: 9, orientation: 'landscape'}
-    });
-    worksheet.pageSetup.margins = {
-        left: 0.7, right: 0.7,
-        top: 0.75, bottom: 0.75,
-        header: 0.3, footer: 0.3
-    };
-    worksheet.pageSetup.printArea = 'A1:G20';
-    worksheet.pageSetup.printTitlesRow = '1:3';
+const departments = [{
+    value: '0',
+    viewValue: 'Forest Environment and Wildlife Dept.'
+},
+{
+    value: '1',
+    viewValue: 'BSNL'
+},
+{
+    value: '3',
+    viewValue: 'HCCDD'
+},
+{
+    value: '4',
+    viewValue: 'Road & Bridges Deptt.'
+},
+{
+    value: '5',
+    viewValue: 'State RMDD'
+},
+{
+    value: '6',
+    viewValue: 'State Health Dept.'
+},
+{
+    value: '7',
+    viewValue: 'State HRDD'
+}
+];
+
+
+function getWorkBook() {
+
+    // exports.exportXlsx = function (inputObject, cb) {
 
     if (inputObject.statementType == 1) {
+
+        const filename = (__dirname + '/st1.xlsx');
+        let workbook = XLSX.readFile(filename, {
+            cellStyles: true, cellNF: true,
+        });
+
         let headRowArray = [];
         headRowArray[0] = ['Plan Name: ' + inputObject.data.name];
         let row2 = [];
@@ -247,73 +168,48 @@ function exportXlsx (inputObject) {
             let arr = [];
             arr[0] = element.group;
             headRowArray[i] = arr;
-            console.log('HD ', i, headRowArray[i]);
             i++;
-            // headRowArray[i] = [];
             element.activities.forEach((activity, index) => {
                 let actArr = [];
                 actArr[0] = index + 1;
                 actArr[1] = activity.name || null;
-                actArr[2] = activity.sector || null;
-                actArr[3] = activity.subSector || null;
-                actArr[4] = activity.scheme.schemeName || null;
-                actArr[5] = activity.department || null;
+                actArr[2] = sectors.filter(s => s.value === activity.sector)[0] ? sectors.filter(s => s.value === activity.sector)[0].viewValue : null || null;
+                actArr[3] = subsectors.filter(s => s.value === activity.subSector)[0] ? subsectors.filter(s => s.value === activity.subSector)[0].viewValue : null || null;
+                if (activity.scheme && activity.anyOtherSource) {
+                    actArr[4] = activity.scheme.schemeName || null;
+                } else if (activity.scheme) {
+                    actArr[4] = activity.scheme.schemeName || null;
+                } else if (activity.anyOtherSource) {
+                    actArr[4] = activity.anyOtherSource || null;
+                } else {
+                    actArr[4] = '--';
+                }
+                actArr[5] = departments.filter(d => d.value === activity.department)[0] ? departments.filter(d => d.value === activity.department)[0].viewValue : null || null;
                 actArr[6] = activity.totalBudget || null;
                 actArr[7] = activity.completionTime || null;
-                actArr[8] = activity.priority || null;
-                // console.log('ActArray :', actArr);
+                actArr[8] = priorities.filter(p => p.value === activity.priority)[0] ? priorities.filter(p => p.value === activity.priority)[0].viewValue : null || null;
                 headRowArray[i] = actArr;
                 i++;
             });
         });
-        // console.log('Head Array :- ', JSON.stringify(headRowArray));
 
-        let rowsLength = headRowArray.length;
-        let maxRowLength = 0;
-        for (let i = 0; i < rowsLength; i++) {
-            newLength = headRowArray[i].length;
-            if (maxRowLength < newLength) {
-                maxRowLength = newLength;
-            }
-            worksheet.addRow(headRowArray[i]);
-        }
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        XLSX.utils.sheet_add_aoa(sheet, headRowArray);
+        workbook.Workbook.Sheets[0].Hidden = 1;
 
-        if (maxRowLength === 9) {
-            worksheet.mergeCells('A1', 'I1');
-            worksheet.mergeCells('A2', 'E2');
-            worksheet.mergeCells('F2', 'I2');
-            worksheet.mergeCells('A3', 'I3');
-        } else if (maxRowLength === 6) {
-            worksheet.mergeCells('A1', 'F1');
-            worksheet.mergeCells('A2', 'C2');
-            worksheet.mergeCells('D2', 'F2');
-            worksheet.mergeCells('A3', 'F3');
-        }
-
-        worksheet.getRow(1).font = {name: 'sans-serif', bold: true, size: 18};
-        worksheet.getRow(2).font = {name: 'sans-serif', bold: true, size: 14};
-        worksheet.getRow(3).font = {name: 'sans-serif', bold: false, size: 16};
-
-        let ArrayOfColumns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
-        ArrayOfColumns.length = maxRowLength;
-        headRowArray.push([]);
-
-        headRowArray.forEach((row, index) => {
-            ArrayOfColumns.forEach(element => {
-                let cellName = element.toString() + index.toString();
-                worksheet.getCell(cellName).alignment = {horizontal: 'center', wrapText: true, indent: 1, readingOrder: 'ltr'};
-                worksheet.getCell(cellName).border = {
-                    top: {style: "medium"},
-                    left: {style: "medium"},
-                    bottom: {style: "medium"},
-                    right: {style: "medium"}
-                };
-            });
+        // output format determined by filename *
+        XLSX.writeFile(workbook, 'out.xlsx', {
+            type: 'utf-8',
+            cellStyles: true
         });
-        workbook.xlsx.writeFile('./sp.xlsx', 'utf-8').then((result) => {
-            console.log('Result :-', result);
-        });
+
+
     } else if (inputObject.statementType == 2) {
+        const filename = (__dirname + '/st2.xlsx');
+        let workbook = XLSX.readFile(filename, {
+            cellStyles: true, cellNF: true,
+        });
+
         let headRowArray = [];
         headRowArray[0] = ['Plan Name: ' + inputObject.data.name];
         let row2 = [];
@@ -349,54 +245,183 @@ function exportXlsx (inputObject) {
                 });
             });
         });
-        let rowsLength = headRowArray.length;
-        let maxRowLength = 0;
-        for (let i = 0; i < rowsLength; i++) {
-            newLength = headRowArray[i].length;
-            if (maxRowLength < newLength) {
-                maxRowLength = newLength;
-            }
-            worksheet.addRow(headRowArray[i]);
-        }
 
-        if (maxRowLength === 9) {
-            worksheet.mergeCells('A1', 'I1');
-            worksheet.mergeCells('A2', 'E2');
-            worksheet.mergeCells('F2', 'I2');
-            worksheet.mergeCells('A3', 'I3');
-        } else if (maxRowLength === 6) {
-            worksheet.mergeCells('A1', 'F1');
-            worksheet.mergeCells('A2', 'C2');
-            worksheet.mergeCells('D2', 'F2');
-            worksheet.mergeCells('A3', 'F3');
-        }
 
-        worksheet.getRow(1).font = {name: 'sans-serif', bold: true, size: 18};
-        worksheet.getRow(2).font = {name: 'sans-serif', bold: true, size: 14};
-        worksheet.getRow(3).font = {name: 'sans-serif', bold: false, size: 16};
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        XLSX.utils.sheet_add_aoa(sheet, headRowArray);
+        workbook.Workbook.Sheets[0].Hidden = 1;
 
-        let ArrayOfColumns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
-        ArrayOfColumns.length = maxRowLength;
-        headRowArray.push([]);
-
-        headRowArray.forEach((row, index) => {
-            ArrayOfColumns.forEach(element => {
-                let cellName = element.toString() + index.toString();
-                worksheet.getCell(cellName).alignment = {horizontal: 'center', wrapText: true, indent: 1, readingOrder: 'ltr'};
-                worksheet.getCell(cellName).border = {
-                    top: {style: "medium"},
-                    left: {style: "medium"},
-                    bottom: {style: "medium"},
-                    right: {style: "medium"}
-                };
-            });
+        // output format determined by filename *
+        XLSX.writeFile(workbook, 'out.xlsx', {
+            type: 'utf-8',
+            cellStyles: true
         });
-        workbook.xlsx.writeFile('./sp.xlsx', 'utf-8').then((result) => {
-            console.log('Result :-', result);
-        });
+
+        // workbook.xlsx.writeFile(urlForExcel, 'utf-8').then(result => {
+        //     // cb(urlForExcel);
+        // });
+
     }
-
 
 }
 
-exportXlsx(objectB);
+
+
+const inputObject = {
+    "statementType": 1,
+    "data": {
+        "_id": "5b6bc146b3c1ef11b6457be5",
+        "name": "devplannnnn",
+        "status": "2",
+        "year": "1",
+        "projectName": "2",
+        "country": "India",
+        "state": "ANDAMAN AND NICOBAR ISLANDS",
+        "district": "NORTH AND MIDDLE ANDAMAN",
+        "tehsil": "Mayabunder",
+        "village": "Asha Nagar (EFA)",
+        "nextActivityId": 15,
+        "groups": [
+            {
+                "group": "Group",
+                "_id": "5b6bc175b3c1ef11b6457be6",
+                "activities": [
+                    {
+                        "_id": "5b9b64b2ed13452dd1ecf8e3",
+                        "plan": "5b6bc146b3c1ef11b6457be5",
+                        "name": "Act for delete",
+                        "group": "5b6bc175b3c1ef11b6457be6",
+                        "__v": 0,
+                        "sequenceId": 12,
+                        "totalBudget": 0,
+                        "kpis": [],
+                        "milestones": [],
+                        "goals": [],
+                        "tags": [],
+                        "endDateActivity": "1969-12-31T18:30:00.000Z",
+                        "startDateActivity": "2099-12-31T18:30:00.000Z"
+                    },
+                    {
+                        "_id": "5b9b75d37082d7409cfce216",
+                        "plan": "5b6bc146b3c1ef11b6457be5",
+                        "name": "Act for delete 2",
+                        "group": "5b6bc175b3c1ef11b6457be6",
+                        "__v": 0,
+                        "sequenceId": 13,
+                        "totalBudget": 0,
+                        "kpis": [],
+                        "milestones": [],
+                        "goals": [],
+                        "tags": [],
+                        "endDateActivity": "1969-12-31T18:30:00.000Z",
+                        "startDateActivity": "2099-12-31T18:30:00.000Z"
+                    },
+                    {
+                        "_id": "5b9f57fd2cabc519984380c1",
+                        "plan": "5b6bc146b3c1ef11b6457be5",
+                        "name": "act statement",
+                        "group": "5b6bc175b3c1ef11b6457be6",
+                        "__v": 0,
+                        "sequenceId": 14,
+                        "totalBudget": 0,
+                        "kpis": [],
+                        "milestones": [],
+                        "goals": [],
+                        "tags": [],
+                        "endDateActivity": "1969-12-31T18:30:00.000Z",
+                        "startDateActivity": "2099-12-31T18:30:00.000Z"
+                    },
+                    {
+                        "_id": "5b9f587f2cabc519984380c4",
+                        "plan": "5b6bc146b3c1ef11b6457be5",
+                        "name": "act statement",
+                        "group": "5b6bc175b3c1ef11b6457be6",
+                        "__v": 0,
+                        "sequenceId": 15,
+                        "totalBudget": 0,
+                        "kpis": [
+                            "5b9f58742cabc519984380c3"
+                        ],
+                        "milestones": [],
+                        "goals": [],
+                        "tags": [],
+                        "endDateActivity": "1969-12-31T18:30:00.000Z",
+                        "startDateActivity": "2099-12-31T18:30:00.000Z"
+                    }
+                ]
+            },
+            {
+                "group": "Group 2",
+                "_id": "5b6bc175b3c1ef11b6457be6",
+                "activities": [
+                    {
+                        "_id": "5b9b64b2ed13452dd1ecf8e3",
+                        "plan": "5b6bc146b3c1ef11b6457be5",
+                        "name": "Act for delete",
+                        "group": "5b6bc175b3c1ef11b6457be6",
+                        "__v": 0,
+                        "sequenceId": 12,
+                        "totalBudget": 0,
+                        "kpis": [],
+                        "milestones": [],
+                        "goals": [],
+                        "tags": [],
+                        "endDateActivity": "1969-12-31T18:30:00.000Z",
+                        "startDateActivity": "2099-12-31T18:30:00.000Z"
+                    },
+                    {
+                        "_id": "5b9b75d37082d7409cfce216",
+                        "plan": "5b6bc146b3c1ef11b6457be5",
+                        "name": "Act for delete 2",
+                        "group": "5b6bc175b3c1ef11b6457be6",
+                        "__v": 0,
+                        "sequenceId": 13,
+                        "totalBudget": 0,
+                        "kpis": [],
+                        "milestones": [],
+                        "goals": [],
+                        "tags": [],
+                        "endDateActivity": "1969-12-31T18:30:00.000Z",
+                        "startDateActivity": "2099-12-31T18:30:00.000Z"
+                    },
+                    {
+                        "_id": "5b9f57fd2cabc519984380c1",
+                        "plan": "5b6bc146b3c1ef11b6457be5",
+                        "name": "act statement",
+                        "group": "5b6bc175b3c1ef11b6457be6",
+                        "__v": 0,
+                        "sequenceId": 14,
+                        "totalBudget": 0,
+                        "kpis": [],
+                        "milestones": [],
+                        "goals": [],
+                        "tags": [],
+                        "endDateActivity": "1969-12-31T18:30:00.000Z",
+                        "startDateActivity": "2099-12-31T18:30:00.000Z"
+                    },
+                    {
+                        "_id": "5b9f587f2cabc519984380c4",
+                        "plan": "5b6bc146b3c1ef11b6457be5",
+                        "name": "act statement",
+                        "group": "5b6bc175b3c1ef11b6457be6",
+                        "__v": 0,
+                        "sequenceId": 15,
+                        "totalBudget": 0,
+                        "kpis": [
+                            "5b9f58742cabc519984380c3"
+                        ],
+                        "milestones": [],
+                        "goals": [],
+                        "tags": [],
+                        "endDateActivity": "1969-12-31T18:30:00.000Z",
+                        "startDateActivity": "2099-12-31T18:30:00.000Z"
+                    }
+                ]
+            }
+        ],
+        "deleted": false
+    },
+    "status": 1
+};
+
+getWorkBook(inputObject);
